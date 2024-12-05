@@ -5,10 +5,12 @@ import { Container } from '@mui/material'
 
 const Login = () => {
   return (
+    <>
+    <Navbar />
     <Container maxWidth="xl">
-      <Navbar />
       <LoginCard />
     </Container>
+    </>
   )
 }
 
