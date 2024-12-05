@@ -21,7 +21,7 @@ const Add = () => {
   const handleAdd = async (e) => {
     e.preventDefault();
     try {
-      const response = await axiosInstance.post("/advisers/addStudent", {
+      const response = await axiosInstance.post("/apis/createChecklist", {
         studentID:studentID,
         first_name:firstName,
         middle_name:middleName,
