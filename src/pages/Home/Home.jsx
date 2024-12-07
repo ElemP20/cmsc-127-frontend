@@ -11,10 +11,10 @@ import {
   Alert
 } from '@mui/material';
 
-import { useNavigate } from 'react-router-dom';
 import AdviseesTable from '../../components/Table/AdviseesTable';
 import axiosInstance from '../../utilities/axiosInstance';
 import AdviserCard from '../../components/Cards/AdviserCard';
+import AddCalendar from '../../components/Widget/addCalendar'; // Import the AddCalendar component
 
 const Home = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -22,6 +22,7 @@ const Home = () => {
   const [students, setStudents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [enrollmentDetails, setEnrollmentDetails] = useState(null);
 
   const getUserInfo = async () => {
     try {
@@ -53,9 +54,21 @@ const Home = () => {
     }
   };
 
+  const getEnrollmentDetails = async () => {
+    try {
+      const response = await axiosInstance.get("/advisers/getEnrollmentDetails");
+      if (response.data && response.data.length > 0) {
+        setEnrollmentDetails(response.data[0]);
+      }
+    } catch (error) {
+      console.error("Error fetching enrollment details:", error);
+    }
+  };
+
   useEffect(() => {
     getUserInfo();
     getAllAdvisees();
+    getEnrollmentDetails();
   }, []);
 
   if (isLoading) {
@@ -82,18 +95,29 @@ const Home = () => {
     <>
       <Navbar user={userInfo} />
       <Container 
-        maxWidth="xl" 
+        maxWidth={false}
         sx={{ 
           py: 4,
           minHeight: '100vh',
-          bgcolor: 'grey.50'
+          bgcolor: 'grey.50',
+          maxWidth: '1600px !important'
         }}
       >
         <Stack direction={{ xs: 'column', md: 'row' }} spacing={3}>
-          <Box sx={{ width: { xs: '100%', md: '300px' } }}>
+          <Box sx={{ width: { xs: '100%', md: '350px' } }}>
             <Fade in timeout={500}>
               <Stack spacing={2}>
                 <AdviserCard userInfo={userInfo} />
+                {enrollmentDetails && (
+                  <>
+                    <AddCalendar 
+                      startDate={enrollmentDetails.startDate}
+                      endDate={enrollmentDetails.endDate}
+                      schoolYear={enrollmentDetails.schoolYear}
+                      semester={enrollmentDetails.semester}
+                    />
+                  </>
+                )}
               </Stack>
             </Fade>
           </Box>

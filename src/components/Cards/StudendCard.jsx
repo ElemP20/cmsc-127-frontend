@@ -1,17 +1,30 @@
 import React from 'react'
-import { Box, Typography, Stack, Paper } from '@mui/material';
+import { Box, Typography, Stack, Paper, Link } from '@mui/material';
 import BadgeIcon from '@mui/icons-material/Badge';
 import SchoolIcon from '@mui/icons-material/School';
 import GradeIcon from '@mui/icons-material/Grade';
+import EmailIcon from '@mui/icons-material/Email';
 import getYear from '../../utilities/getYear';
 import { usePrograms } from '../../models/ProgramModel';
 
-const StudendCard = ({studentInfo}) => {
+const StudendCard = ({studentInfo, userInfo}) => {
+  console.log(userInfo);
   const { programs } = usePrograms();
 
   const getProgramName = (programCode) => {
-    const program = programs.find(p => p.program_id === programCode);
+    const program = programs.find(p => p.program_id == programCode);
     return program ? program.program_name : programCode;
+  };
+
+  const getEmailAddress = () => {
+    return `${studentInfo?.stud_email}`;
+  };
+
+  const getGmailLink = () => {
+    const email = getEmailAddress();
+    const subject = encodeURIComponent("ADVISING");
+    const body = encodeURIComponent(`Dear ${studentInfo?.stud_Fname} ${studentInfo?.stud_Mname ? studentInfo?.stud_Mname + ' ' : ''}${studentInfo?.stud_Lname},\n\n\n\nYours,\n${userInfo?.first_name} ${userInfo?.middle_name ? userInfo?.middle_name + ' ' : ''}${userInfo?.last_name}\nAdviser`);
+    return `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
   };
 
   return (
@@ -37,6 +50,30 @@ const StudendCard = ({studentInfo}) => {
             <Typography variant="h6">
               {studentInfo?.id}
             </Typography>
+          </Box>
+
+          <Box>
+            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+              <EmailIcon color="primary" />
+              <Typography variant="subtitle1" color="text.secondary">
+                Email
+              </Typography>
+            </Stack>
+            <Link 
+              href={getGmailLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                textDecoration: 'none',
+                '&:hover': {
+                  textDecoration: 'underline'
+                }
+              }}
+            >
+              <Typography variant="h6" color="primary">
+                {getEmailAddress()}
+              </Typography>
+            </Link>
           </Box>
 
           <Box>
