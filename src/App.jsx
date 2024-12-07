@@ -6,6 +6,7 @@ import Home from './pages/Home/Home'
 import Checklist from './pages/Checklist/Checklist'
 import Add from './pages/Add/Add'
 import Choose from './pages/Choose/Choose'
+import SysAdmin from './pages/SysAdmin/SysAdmin'
 
 const routes = (
   <Router>
@@ -14,6 +15,7 @@ const routes = (
       <Route path="/Home" exact element={<Home />} />
       <Route path="/ViewChecklist" exact element={<Checklist/>} />
       <Route path="/Add" exact element={<Add />} />
+      <Route path="/SysAdmin" exact element={<SysAdmin />} />
       <Route path="/" exact element={<Choose />} />
     </Routes>
   </Router>

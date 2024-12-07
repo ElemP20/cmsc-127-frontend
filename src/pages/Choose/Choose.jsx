@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School';
 import PersonIcon from '@mui/icons-material/Person';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import Navbar from '../../components/Navbar/Navbar';
 
 const Choose = () => {
@@ -18,6 +19,9 @@ const Choose = () => {
   const handleRoleSelect = (role) => {
     if (role === 'student') {
       navigate('/asdfasdfsd#');
+    }
+    else if (role == 'admin') {
+      navigate('/SysAdmin');
     } else {
       navigate('/login');
     }
@@ -93,6 +97,33 @@ const Choose = () => {
                     </Typography>
                     <Typography variant="body1" color="text.secondary">
                       Access your professor portal
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Box>
+            <Box sx={{ flex: '1 1 300px', maxWidth: '400px' }}>
+              <Card 
+                sx={{ 
+                  height: '100%',
+                  transition: '0.3s',
+                  '&:hover': {
+                    transform: 'scale(1.05)',
+                    boxShadow: 5
+                  }
+                }}
+              >
+                <CardActionArea 
+                  onClick={() => handleRoleSelect('admin')}
+                  sx={{ height: '100%', p: 2 }}
+                >
+                  <CardContent sx={{ textAlign: 'center' }}>
+                    <SupervisorAccountIcon sx={{ fontSize: 80, color: 'primary.main', mb: 2 }} />
+                    <Typography variant="h4" component="div" gutterBottom>
+                      System Administrator
+                    </Typography>
+                    <Typography variant="body1" color="text.secondary">
+                      Access the System
                     </Typography>
                   </CardContent>
                 </CardActionArea>

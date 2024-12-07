@@ -5,7 +5,6 @@ import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import getYear from '../../utilities/getYear';
 import WysiwygIcon from '@mui/icons-material/Wysiwyg';
-import EditIcon from '@mui/icons-material/Edit';
 import { usePrograms } from '../../models/ProgramModel';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -29,12 +28,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const StatusChip = styled(Chip)(({ status, theme }) => ({
-  backgroundColor: status === 'Regular' ? theme.palette.success.light :
-                  status === 'Irregular' ? theme.palette.warning.light :
-                  theme.palette.grey.light,
-  color: status === 'Regular' ? theme.palette.success.dark :
-         status === 'Irregular' ? theme.palette.warning.dark :
-         theme.palette.grey.dark,
+  backgroundColor: status ? theme.palette.success.light : theme.palette.warning.light,
+  color: status ? theme.palette.success : theme.palette.warning,
   fontWeight: 'bold'
 }));
 
@@ -43,12 +38,12 @@ const AdviseesTable = ({advisees, students}) => {
   const navigate = useNavigate();
 
   const getProgramName = (programCode) => {
-    const program = programs.find(p => p.program_id === programCode);
+    const program = programs.find(p => p.program_id == programCode);
     return program ? program.program_name : programCode;
   };
 
   const getStudentDetails = (studentId) => {
-    const student = students.find(s => s.id === studentId);
+    const student = students.find(s => s.id == studentId);
     return student;
   }
 
@@ -99,7 +94,7 @@ const AdviseesTable = ({advisees, students}) => {
                 <TableCell>{getYear(studentDetails.stud_yr)}</TableCell>
                 <TableCell>
                   <Typography variant="body2" color="text.secondary">
-                    {getProgramName(studentDetails.program)}
+                    {getProgramName(studentDetails.program_id)}
                   </Typography>
                 </TableCell>
                 <TableCell>
@@ -111,8 +106,8 @@ const AdviseesTable = ({advisees, students}) => {
                 </TableCell>
                 <TableCell>
                   <StatusChip 
-                    label={advisee.status || 'Not Tagged'} 
-                    status={advisee.status ? 'Regular' : 'Irregular'}
+                    label={advisee.status ? 'Tagged' : 'Not Tagged'} 
+                    status={advisee.status}
                     size="small"
                   />
                 </TableCell>
@@ -131,7 +126,8 @@ const AdviseesTable = ({advisees, students}) => {
                           stud_Mname: studentDetails.stud_Mname,
                           stud_Lname: studentDetails.stud_Lname,
                           stud_yr: studentDetails.stud_yr,
-                          program: getProgramName(studentDetails.program),
+                          stud_email: studentDetails.stud_email,
+                          program: getProgramName(studentDetails.program_id),
                           status: advisee.status || 'Not Tagged'
                         }
                       })}

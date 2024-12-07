@@ -7,13 +7,18 @@ import {
   CircularProgress, 
   Stack, 
   Typography,
-  Fade
+  Fade,
+  Tooltip
 } from '@mui/material';
 import axiosInstance from '../../utilities/axiosInstance';
 import StudendCard from '../../components/Cards/StudendCard';
 import Navbar from '../../components/Navbar/Navbar';
 import CoursesTable from '../../components/Table/CoursesTable';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
+import isBetween from 'dayjs/plugin/isBetween';
+
+dayjs.extend(isBetween);
 
 const Checklist = () => {
   const location = useLocation();
@@ -23,7 +28,7 @@ const Checklist = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [enrollmentDetails, setEnrollmentDetails] = useState(null);
 
   const getUserInfo = async () => {
     try {
@@ -36,8 +41,30 @@ const Checklist = () => {
         localStorage.clear();
         navigate("/Login");
       }
-      setError("Failed to load user information");
     }
+  };
+
+  const getEnrollmentDetails = async () => {
+    try {
+      const response = await axiosInstance.get("/advisers/getEnrollmentDetails");
+      if (response.data && response.data.length > 0) {
+        setEnrollmentDetails(response.data[0]);
+      }
+    } catch (error) {
+      console.error("Error fetching enrollment details:", error);
+    }
+  };
+
+  const isWithinEnrollmentPeriod = () => {
+    if (!enrollmentDetails) return false;
+    
+    const now = dayjs();
+    return now.isBetween(
+      dayjs(enrollmentDetails.startDate), 
+      dayjs(enrollmentDetails.endDate), 
+      'day', 
+      '[]'
+    );
   };
 
   const handleTagged = async () => {
@@ -63,7 +90,6 @@ const Checklist = () => {
         setCourses(response.data);
       }
     } catch (error) {
-      setError("Failed to load courses");
       console.log(error);
     } finally {
       setIsLoading(false);
@@ -73,6 +99,7 @@ const Checklist = () => {
   useEffect(() => {
     getUserInfo();
     getAllCourses();
+    getEnrollmentDetails();
   }, []);
 
   if (isLoading) {
@@ -95,34 +122,39 @@ const Checklist = () => {
     );
   }
 
+  console.log(data.status);
   return (
     <>
       <Navbar user={userInfo}/>
       <Container 
-        maxWidth="xl" 
+        maxWidth="100%" 
         sx={{ 
           py: 4,
-          minHeight: '100vh',
-          bgcolor: 'grey.50'
+          minHeight: '100vh'
         }}
       >
         <Stack direction={{ xs: 'column', md: 'row' }} spacing={3}>
           <Box sx={{ width: { xs: '100%', md: '300px' } }}>
             <Fade in timeout={500}>
               <Stack spacing={2}>
-                <StudendCard studentInfo={data} />
-                <Button 
-                  variant="contained" 
-                  color="primary" 
-                  sx={{ height: 40 }} 
-                  onClick={handleTagged}
-                >
-                  {data.status ? "Remove Tag Status" : "Tag Student"}
-                </Button>
+                <StudendCard studentInfo={data} userInfo={userInfo}/>
+                <Tooltip title={!isWithinEnrollmentPeriod() ? "Action only available during enrollment period" : ""}>
+                  <span style={{ width: '100%' }}>
+                    <Button 
+                      variant="contained" 
+                      color="primary" 
+                      sx={{ height: 40, width: '100%' }} 
+                      onClick={handleTagged}
+                      disabled={!isWithinEnrollmentPeriod()}
+                    >
+                      {data.status == 1 ? "Remove Tag Status" : "Tag Student"}
+                    </Button>
+                  </span>
+                </Tooltip>
                 <Button 
                   variant="outlined"
                   color="primary" 
-                  sx={{ height: 40 }} 
+                  sx={{ height: 40, width: '100%' }} 
                   onClick={handleBack}
                 >
                   Back
