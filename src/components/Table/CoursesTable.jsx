@@ -2,14 +2,13 @@ import React, { useMemo, useState } from 'react'
 import { Stack } from '@mui/material';
 import YearTable from './YearTable';
 
-const CoursesTable = ({courses}) => {
+const CoursesTable = ({courses, program_id}) => {
   const [selectedCourses, setSelectedCourses] = useState({});
   const [cmsc191Count, setCmsc191Count] = useState(0);
 
   const handleCourseSelect = (semesterId, type, course) => {
     setSelectedCourses(prev => {
       const oldCourse = prev[semesterId]?.[type];
-      // Update CMSC 191 count
       if (oldCourse?.course_id === "CMSC 191") {
         setCmsc191Count(count => count - 1);
       }
@@ -38,7 +37,6 @@ const CoursesTable = ({courses}) => {
         return true;
       }
 
-      // Special handling for CMSC 191
       if (course.course_id === "CMSC 191") {
         return cmsc191Count < 2;
       }
@@ -72,7 +70,8 @@ const CoursesTable = ({courses}) => {
   return (
     <Stack gap={2}>
       {years.map((year) => (
-        <YearTable 
+        <YearTable
+          program_id={program_id}
           key={year}
           courses={groupedCourses[year]} 
           term={year.toUpperCase()}

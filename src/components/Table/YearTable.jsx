@@ -1,7 +1,8 @@
 import React from 'react'
 import { styled } from '@mui/material/styles';
-import { Table, TableCell, TableContainer, TableHead, TableRow, Paper, Stack } from '@mui/material';
-import PerSemester from './PerSemester';
+import { Table, TableCell, TableContainer, TableHead, TableRow, Stack } from '@mui/material';
+import PerSemester_ComputerScience from './PerSemester_ComputerScience';
+import PerSemester_Math from './PerSemester_Math';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   fontWeight: 'bold',
@@ -18,46 +19,89 @@ const HeaderCell = styled(TableCell)(({ theme }) => ({
   padding: '8px'
 }));
 
-const YearTable = ({ courses, term, onCourseSelect, getAvailableCourses, selectedCourses }) => {
-  return (
-    <>
-    <Stack>
-      <TableContainer>
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell colSpan={6}>{term}</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableHead>
-            <TableRow>
-              <HeaderCell colSpan={3}>1st Semester</HeaderCell>
-              <HeaderCell colSpan={3}>2nd Semester</HeaderCell>
-            </TableRow>
-          </TableHead>
-        </Table>
-      </TableContainer>
-      <Stack direction={"row"} gap={1}>
-        <PerSemester 
-          courses={courses["1st Semester"]} 
-          term={term} 
-          sem={"1st Semester"}
-          onCourseSelect={onCourseSelect}
-          getAvailableCourses={getAvailableCourses}
-          selectedCourses={selectedCourses}
-        />
-        <PerSemester 
-          courses={courses["2nd Semester"]} 
-          term={term} 
-          sem={"2nd Semester"}
-          onCourseSelect={onCourseSelect}
-          getAvailableCourses={getAvailableCourses}
-          selectedCourses={selectedCourses}
-        />
+const YearTable = ({ courses, term, onCourseSelect, getAvailableCourses, selectedCourses, program_id }) => {
+
+  if(program_id == 301) {
+    return (
+      <>
+      <Stack>
+        <TableContainer>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell colSpan={6}>{term}</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableHead>
+              <TableRow>
+                <HeaderCell colSpan={3}>1st Semester</HeaderCell>
+                <HeaderCell colSpan={3}>2nd Semester</HeaderCell>
+              </TableRow>
+            </TableHead>
+          </Table>
+        </TableContainer>
+        <Stack direction={"row"} gap={1}>
+          <PerSemester_ComputerScience
+            courses={courses["1st Semester"]} 
+            term={term} 
+            sem={"1st Semester"}
+            onCourseSelect={onCourseSelect}
+            getAvailableCourses={getAvailableCourses}
+            selectedCourses={selectedCourses}
+          />
+          <PerSemester_ComputerScience
+            courses={courses["2nd Semester"]} 
+            term={term} 
+            sem={"2nd Semester"}
+            onCourseSelect={onCourseSelect}
+            getAvailableCourses={getAvailableCourses}
+            selectedCourses={selectedCourses}
+          />
+        </Stack>
       </Stack>
-    </Stack>
-    </>
-  )
+      </>
+    )
+  } else if (program_id == 302) {
+    return (
+      <>
+      <Stack>
+        <TableContainer>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell colSpan={6}>{term}</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableHead>
+              <TableRow>
+                <HeaderCell colSpan={3}>1st Semester</HeaderCell>
+                <HeaderCell colSpan={3}>2nd Semester</HeaderCell>
+              </TableRow>
+            </TableHead>
+          </Table>
+        </TableContainer>
+        <Stack direction={"row"} gap={1}>
+          <PerSemester_Math
+            courses={courses["1st Semester"]} 
+            term={term} 
+            sem={"1st Semester"}
+            onCourseSelect={onCourseSelect}
+            getAvailableCourses={getAvailableCourses}
+            selectedCourses={selectedCourses}
+          />
+          <PerSemester_Math
+            courses={courses["2nd Semester"]} 
+            term={term} 
+            sem={"2nd Semester"}
+            onCourseSelect={onCourseSelect}
+            getAvailableCourses={getAvailableCourses}
+            selectedCourses={selectedCourses}
+          />
+        </Stack>
+      </Stack>
+      </>
+    )
+  }
 }
 
 export default YearTable

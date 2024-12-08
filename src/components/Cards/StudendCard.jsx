@@ -8,8 +8,10 @@ import getYear from '../../utilities/getYear';
 import { usePrograms } from '../../models/ProgramModel';
 
 const StudendCard = ({studentInfo, userInfo}) => {
-  console.log(userInfo);
+
   const { programs } = usePrograms();
+
+  console.log(studentInfo, userInfo);
 
   const getProgramName = (programCode) => {
     const program = programs.find(p => p.program_id == programCode);
@@ -48,7 +50,7 @@ const StudendCard = ({studentInfo, userInfo}) => {
               </Typography>
             </Stack>
             <Typography variant="h6">
-              {studentInfo?.id}
+              {studentInfo?.stud_id}
             </Typography>
           </Box>
 
@@ -96,7 +98,7 @@ const StudendCard = ({studentInfo, userInfo}) => {
               </Typography>
             </Stack>
             <Typography variant="h6">
-              {getProgramName(studentInfo?.program)}
+              {getProgramName(studentInfo?.program_id)}
             </Typography>
           </Box>
         </Stack>

@@ -70,7 +70,7 @@ const Checklist = () => {
   const handleTagged = async () => {
     try {
       await axiosInstance.post(`/advisers/tagStudent/`, {
-        student_id: data.student_id,
+        student_id: data.id,
         status: data.status
       });
       navigate("/Home");
@@ -85,7 +85,7 @@ const Checklist = () => {
 
   const getAllCourses = async () => {
     try {
-      const response = await axiosInstance.get(`/advisers/getChecklist/${data.id}`);
+      const response = await axiosInstance.get(`/advisers/getChecklist/${data.student_id}/${data.program_id}`);
       if (response.data) {
         setCourses(response.data);
       }
@@ -121,8 +121,7 @@ const Checklist = () => {
       </Box>
     );
   }
-
-  console.log(data.status);
+  
   return (
     <>
       <Navbar user={userInfo}/>
@@ -165,7 +164,7 @@ const Checklist = () => {
           <Box sx={{ flexGrow: 1 }} id="courses-table">
             <Fade in timeout={800}>
               <Box>
-                <CoursesTable courses={courses} />
+                <CoursesTable courses={courses} program_id={data.program_id}/>
               </Box>
             </Fade>
           </Box>
