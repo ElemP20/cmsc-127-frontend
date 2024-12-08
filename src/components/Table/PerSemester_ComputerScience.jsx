@@ -15,7 +15,7 @@ const StyledTableRow = styled(TableRow)(({ status }) => ({
   backgroundColor: status ? '#70ff83' : 'inherit',
 }));
 
-const PerSemester = ({ courses, term, sem, onCourseSelect, getAvailableCourses, selectedCourses }) => {
+const PerSemester_ComputerScience = ({ courses, term, sem, onCourseSelect, getAvailableCourses, selectedCourses }) => {
   const [totalUnits, setTotalUnits] = useState(0);
   const semesterId = `${term}_${sem}`;
 
@@ -74,7 +74,10 @@ const PerSemester = ({ courses, term, sem, onCourseSelect, getAvailableCourses, 
       cont = true;
     }
     if (!cont) {
-      if (!remaining.some(r => r.course_id === course.course_id)) {
+      if (!remaining.some(r => r.course_id === course.course_id) || 
+          (course.course_id === "CMSC 190" && 
+            ((course.term === "1st Semester" && course.checklist_record_id === remaining[0]?.checklist_record_id) ||
+            (course.term === "2nd Semester" && course.checklist_record_id !== remaining[0]?.checklist_record_id)))) {
         remaining.push(course);
       }
     }
@@ -92,7 +95,7 @@ const PerSemester = ({ courses, term, sem, onCourseSelect, getAvailableCourses, 
     setTotalUnits(fixedUnits + selectedUnits);
   }, [remainingCourses, selectedCourses, semesterId]);
 
-  return (
+  return (  
     <TableContainer>
       <Table size="small">
         <TableHead>
@@ -120,20 +123,37 @@ const PerSemester = ({ courses, term, sem, onCourseSelect, getAvailableCourses, 
             </StyledTableRow>
           ))}
           
-          {term === "2ND YEAR" && sem === "2nd Semester" && (
+          {term === "2ND YEAR" && sem === "1st Semester" && (
             <CourseDropdown
-              type="HIST 1/KAS 1"
-              selection={getAvailableCourses(categories["HISTKAS"], semesterId, "HISTKAS")}
-              onSelect={(course) => onCourseSelect(semesterId, "HISTKAS", course)}
+              type="NSTP"
+              selection={getAvailableCourses(categories["NSTP"], semesterId, "NSTP")}
+              onSelect={(course) => onCourseSelect(semesterId, "NSTP", course)}
             />
           )}
 
+          {term === "2ND YEAR" && sem === "2nd Semester" && (
+            <>
+              <CourseDropdown
+                type="NSTP"
+                selection={getAvailableCourses(categories["NSTP"], semesterId, "NSTP")}
+                onSelect={(course) => onCourseSelect(semesterId, "NSTP", course)}
+              />
+              <CourseDropdown
+                type="HIST 1/KAS 1"
+                selection={getAvailableCourses(categories["HISTKAS"], semesterId, "HISTKAS")}
+                onSelect={(course) => onCourseSelect(semesterId, "HISTKAS", course)}
+              />
+            </>
+          )}
+
           {term === "3RD YEAR" && sem === "1st Semester" && (
-            <CourseDropdown
-              type="MATH/CS ELECTIVE"
-              selection={getAvailableCourses(categories["MATH/CS ELECTIVE"], semesterId, "MATH/CS ELECTIVE")}
-              onSelect={(course) => onCourseSelect(semesterId, "MATH/CS ELECTIVE", course)}
-            />
+            <>
+              <CourseDropdown
+                type="MATH/CS ELECTIVE"
+                selection={getAvailableCourses(categories["MATH/CS ELECTIVE"], semesterId, "MATH/CS ELECTIVE")}
+                onSelect={(course) => onCourseSelect(semesterId, "MATH/CS ELECTIVE", course)}
+              />
+            </>
           )}
 
           {term === "3RD YEAR" && sem === "2nd Semester" && (
@@ -190,4 +210,4 @@ const PerSemester = ({ courses, term, sem, onCourseSelect, getAvailableCourses, 
   );
 };
 
-export default PerSemester
+export default PerSemester_ComputerScience

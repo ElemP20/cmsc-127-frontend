@@ -17,10 +17,7 @@ const Choose = () => {
   const navigate = useNavigate();
 
   const handleRoleSelect = (role) => {
-    if (role === 'student') {
-      navigate('/asdfasdfsd#');
-    }
-    else if (role == 'admin') {
+    if (role == 'admin') {
       navigate('/SysAdmin');
     } else {
       navigate('/login');
@@ -59,8 +56,8 @@ const Choose = () => {
                   }
                 }}
               >
+              <a href="https://sais-project.vercel.app" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <CardActionArea 
-                  onClick={() => handleRoleSelect('student')}
                   sx={{ height: '100%', p: 2 }}
                 >
                   <CardContent sx={{ textAlign: 'center' }}>
@@ -73,6 +70,7 @@ const Choose = () => {
                     </Typography>
                   </CardContent>
                 </CardActionArea>
+                </a>
               </Card>
             </Box>
             <Box sx={{ flex: '1 1 300px', maxWidth: '400px' }}>

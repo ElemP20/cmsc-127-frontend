@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
+import { useNavigate } from 'react-router-dom';
 
 import { 
   Box, 
@@ -23,6 +24,8 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [enrollmentDetails, setEnrollmentDetails] = useState(null);
+
+  const navigate = useNavigate();
 
   const getUserInfo = async () => {
     try {

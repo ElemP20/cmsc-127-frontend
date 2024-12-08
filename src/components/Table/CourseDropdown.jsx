@@ -31,7 +31,9 @@ const CourseDropdown = ({selection, onSelect, type}) => {
       case "Arts and Humanities - Elective": return "AH Elective";
       case "Natural Sciences and Mathematics - Elective": return "NSM Elective";
       case "Social Sciences and Philosophy - Elective": return "CSS Elective";
+      case "NSTP": return "NSTP";
       case "MATH/CS ELECTIVE": return "Math/CS Elective";
+      case "MATH ELECTIVE": return "Math Elective";
       case "HIST 1/KAS 1": return "Hist1/Kas1";
       default: return "Free Elective";
     }

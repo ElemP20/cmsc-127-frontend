@@ -44,12 +44,6 @@ const SysAdmin = () => {
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      console.log({
-        start_date: startDate.format('YYYY-MM-DD'),
-        end_date: endDate.format('YYYY-MM-DD'),
-        School_Year: schoolYear,
-        Semester: semester
-      });
       await axiosInstance.post("/advisers/updateEnrollmentDetails", {
         start_date: startDate.format('YYYY-MM-DD'),
         end_date: endDate.format('YYYY-MM-DD'),
@@ -129,6 +123,7 @@ const SysAdmin = () => {
               >
                 <MenuItem value={1}>1st Semester</MenuItem>
                 <MenuItem value={2}>2nd Semester</MenuItem>
+                <MenuItem value={3}>Midyear</MenuItem>
               </Select>
             </FormControl>
 

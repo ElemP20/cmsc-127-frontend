@@ -1,11 +1,11 @@
 import React from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Box, Chip, Typography } from '@mui/material';
-import axiosInstance from '../../utilities/axiosInstance';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import getYear from '../../utilities/getYear';
 import WysiwygIcon from '@mui/icons-material/Wysiwyg';
 import { usePrograms } from '../../models/ProgramModel';
+import axiosInstance from '../../utilities/axiosInstance';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   fontWeight: 'bold',
@@ -27,7 +27,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const StatusChip = styled(Chip)(({ status, theme }) => ({
+const StatusChip = styled(Chip)(({ status, theme }) => (
+  console.log(status),
+  {
   backgroundColor: status ? theme.palette.success.light : theme.palette.warning.light,
   color: status ? theme.palette.success : theme.palette.warning,
   fontWeight: 'bold'
@@ -42,19 +44,17 @@ const AdviseesTable = ({advisees, students}) => {
     return program ? program.program_name : programCode;
   };
 
-  const getStudentDetails = (studentId) => {
-    const student = students.find(s => s.id == studentId);
-    return student;
+  const handleEditStatus = async(studentId, status) => {
+    const response = await axiosInstance.put(`/advisers/editStatus`, {
+      studentID: studentId,
+      newStatus: status
+    });
+    console.log(response);
   }
 
-  const handleDelete = async (id) => {
-    try {
-      const response = await axiosInstance.delete(`/advisers/delete/${id}`);
-      alert(response.data.message);
-      window.location.reload(false);
-    } catch (error) {
-      console.log(error);
-    }
+  const getStudentDetails = (studentId) => {
+    const student = students.find(s => s.stud_id == studentId);
+    return student;
   }
 
   return (
@@ -79,11 +79,11 @@ const AdviseesTable = ({advisees, students}) => {
         <TableBody>
           {advisees.map((advisee) => {
             const studentDetails = getStudentDetails(advisee.student_id);
-            return studentDetails ? (
-              <StyledTableRow key={advisee.id}>
+            return studentDetails && studentDetails.status !== "Expelled" ? (
+              <StyledTableRow key={advisee.stud_id}>
                 <TableCell>
                   <Typography variant="body1" fontWeight="medium">
-                    {studentDetails.id}
+                    {studentDetails.stud_id}
                   </Typography>
                 </TableCell>
                 <TableCell>
@@ -112,7 +112,7 @@ const AdviseesTable = ({advisees, students}) => {
                   />
                 </TableCell>
                 <TableCell align="center">
-                  <Box>
+                  <Box display="flex" flexDirection={'column'} gap={1}>
                     <Button
                       variant="contained"
                       color="primary"
@@ -120,30 +120,37 @@ const AdviseesTable = ({advisees, students}) => {
                       startIcon={<WysiwygIcon />}
                       onClick={() => navigate(`/viewChecklist/`, {
                         state: {
-                          id: studentDetails.id,
-                          student_id: studentDetails.id,
+                          id: studentDetails.stud_id,
+                          student_id: studentDetails.stud_id,
                           stud_Fname: studentDetails.stud_Fname,
                           stud_Mname: studentDetails.stud_Mname,
                           stud_Lname: studentDetails.stud_Lname,
                           stud_yr: studentDetails.stud_yr,
                           stud_email: studentDetails.stud_email,
-                          program: getProgramName(studentDetails.program_id),
-                          status: advisee.status || 'Not Tagged'
+                          program_id: studentDetails.program_id,
+                          status: advisee.status
                         }
                       })}
                       sx={{ mr: 1 }}
                     >
                       View Checklist
                     </Button>
-                    {/* <Button
-                      variant="contained"
-                      color="error"
-                      size="small"
-                      startIcon={<EditIcon />}
-                      onClick={() => handleDelete(advisee.id)}
-                    >
-                      Remove
-                    </Button> */}
+                    <Box display="flex" gap={2} alignContent={'center'} justifyContent={'center'}>
+                      <Button
+                        variant="contained"
+                        color="warning"
+                        size="small"
+                        onClick={() => handleEditStatus(studentDetails.stud_id, studentDetails.status === "Active" ? "LOA" : "Active")}
+                        sx={{ mr: 1 }}>{studentDetails.status === "Active" ? "LOA" : "Active"}
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="error"
+                        size="small"
+                        onClick={() => handleEditStatus(studentDetails.stud_id, "Expelled")}
+                        sx={{ mr: 1 }}>Expel
+                      </Button>
+                    </Box>
                   </Box>
                 </TableCell>
               </StyledTableRow>
