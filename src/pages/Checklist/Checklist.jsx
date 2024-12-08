@@ -164,7 +164,7 @@ const Checklist = () => {
           <Box sx={{ flexGrow: 1 }} id="courses-table">
             <Fade in timeout={800}>
               <Box>
-                <CoursesTable courses={courses} program_id={data.program_id}/>
+                <CoursesTable courses={courses} program_id={data.program_id} student_id={data.student_id}/>
               </Box>
             </Fade>
           </Box>

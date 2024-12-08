@@ -11,11 +11,11 @@ const HeaderCell = styled(TableCell)(({ theme }) => ({
   padding: '8px'
 }));
 
-const StyledTableRow = styled(TableRow)(({ status }) => ({
-  backgroundColor: status ? '#70ff83' : 'inherit',
+const StyledTableRow = styled(TableRow)(({ status, inEnrolled }) => ({
+  backgroundColor: inEnrolled ? '#ffff00' : status ? '#70ff83' : 'inherit',
 }));
 
-const PerSemester_ComputerScience = ({ courses, term, sem, onCourseSelect, getAvailableCourses, selectedCourses }) => {
+const PerSemester_ComputerScience = ({ courses, term, sem, onCourseSelect, getAvailableCourses, selectedCourses, enrolled}) => {
   const [totalUnits, setTotalUnits] = useState(0);
   const semesterId = `${term}_${sem}`;
 
@@ -107,7 +107,7 @@ const PerSemester_ComputerScience = ({ courses, term, sem, onCourseSelect, getAv
         </TableHead>
         <TableBody>
           {remainingCourses.map((course) => (
-            <StyledTableRow key={course.course_id} status={course.status}>
+            <StyledTableRow key={course.course_id} status={course.status} inEnrolled={enrolled.includes(course.course_id)}>
               <TableCell align="center">
                 <Stack direction="Column">
                   <Typography align='center' fontSize={'0.8rem'}>{course.course_id}</Typography>

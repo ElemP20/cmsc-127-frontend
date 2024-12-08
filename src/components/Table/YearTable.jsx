@@ -19,7 +19,9 @@ const HeaderCell = styled(TableCell)(({ theme }) => ({
   padding: '8px'
 }));
 
-const YearTable = ({ courses, term, onCourseSelect, getAvailableCourses, selectedCourses, program_id }) => {
+const YearTable = ({ courses, term, onCourseSelect, getAvailableCourses, selectedCourses, program_id, enrolled}) => {
+
+
 
   if(program_id == 301) {
     return (
@@ -42,6 +44,7 @@ const YearTable = ({ courses, term, onCourseSelect, getAvailableCourses, selecte
         </TableContainer>
         <Stack direction={"row"} gap={1}>
           <PerSemester_ComputerScience
+            enrolled={enrolled}
             courses={courses["1st Semester"]} 
             term={term} 
             sem={"1st Semester"}
@@ -50,6 +53,7 @@ const YearTable = ({ courses, term, onCourseSelect, getAvailableCourses, selecte
             selectedCourses={selectedCourses}
           />
           <PerSemester_ComputerScience
+            enrolled={enrolled}
             courses={courses["2nd Semester"]} 
             term={term} 
             sem={"2nd Semester"}
@@ -82,6 +86,7 @@ const YearTable = ({ courses, term, onCourseSelect, getAvailableCourses, selecte
         </TableContainer>
         <Stack direction={"row"} gap={1}>
           <PerSemester_Math
+            enrolled={enrolled}
             courses={courses["1st Semester"]} 
             term={term} 
             sem={"1st Semester"}
@@ -90,6 +95,7 @@ const YearTable = ({ courses, term, onCourseSelect, getAvailableCourses, selecte
             selectedCourses={selectedCourses}
           />
           <PerSemester_Math
+            enrolled={enrolled}
             courses={courses["2nd Semester"]} 
             term={term} 
             sem={"2nd Semester"}
