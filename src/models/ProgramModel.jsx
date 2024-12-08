@@ -20,12 +20,10 @@ export const ProgramProvider = ({ children }) => {
     }
   };
 
-  // Fetch data only once when the provider mounts
   useEffect(() => {
     fetchPrograms();
   }, []);
 
-  // Function to manually refresh data if needed
   const refreshPrograms = () => {
     setLoading(true);
     fetchPrograms();
@@ -43,7 +41,6 @@ export const ProgramProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use the programs data
 export const usePrograms = () => {
   const context = useContext(ProgramContext);
   if (!context) {

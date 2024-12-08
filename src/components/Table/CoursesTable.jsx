@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { Stack } from '@mui/material';
 import YearTable from './YearTable';
+import axiosInstance from '../../utilities/axiosInstance';
 
-const CoursesTable = ({courses, program_id}) => {
+const CoursesTable = ({courses, program_id, student_id}) => {
   const [selectedCourses, setSelectedCourses] = useState({});
   const [cmsc191Count, setCmsc191Count] = useState(0);
 
@@ -24,7 +25,23 @@ const CoursesTable = ({courses, program_id}) => {
         }
       };
     });
-  };
+  }; 
+
+  const getEnrolled = async () => {
+    try {
+      const response = await axiosInstance.get(`/advisers/getEnrolled`);
+      const filtered = response.data.filter(e => e.stud_id === student_id).map(e => e.course_id)
+      setEnrolled(filtered);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const [enrolled, setEnrolled] = useState([]);
+
+  useEffect(() => {
+    getEnrolled();
+  }, []);
 
   const getAvailableCourses = (courses, semesterId, type) => {
     const selectedElectives = Object.entries(selectedCourses).flatMap(([id, semCourses]) => 
@@ -67,10 +84,13 @@ const CoursesTable = ({courses, program_id}) => {
 
   const years = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
 
+  console.log(enrolled);
+
   return (
     <Stack gap={2}>
       {years.map((year) => (
         <YearTable
+          enrolled={enrolled}
           program_id={program_id}
           key={year}
           courses={groupedCourses[year]} 

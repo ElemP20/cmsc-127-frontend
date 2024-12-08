@@ -25,7 +25,6 @@ const CourseDropdown = ({selection, onSelect, type}) => {
     }
   };
 
-
   const getProperLabel =(type) => {
     switch(type){
       case "Arts and Humanities - Elective": return "AH Elective";

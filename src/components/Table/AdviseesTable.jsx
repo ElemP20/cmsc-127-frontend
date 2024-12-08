@@ -45,11 +45,15 @@ const AdviseesTable = ({advisees, students}) => {
   };
 
   const handleEditStatus = async(studentId, status) => {
-    const response = await axiosInstance.put(`/advisers/editStatus`, {
-      studentID: studentId,
-      newStatus: status
-    });
-    console.log(response);
+    try {
+      const response = await axiosInstance.put(`/advisers/editStatus`, {
+        studentID: studentId,
+        newStatus: status
+      });
+      location.reload()
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const getStudentDetails = (studentId) => {
