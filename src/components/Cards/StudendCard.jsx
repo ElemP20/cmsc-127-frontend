@@ -50,7 +50,7 @@ const StudendCard = ({studentInfo, userInfo}) => {
               </Typography>
             </Stack>
             <Typography variant="h6">
-              {studentInfo?.stud_id}
+              {studentInfo?.student_id}
             </Typography>
           </Box>
 
